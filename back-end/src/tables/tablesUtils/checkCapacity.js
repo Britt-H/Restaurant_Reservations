@@ -1,14 +1,12 @@
-
-//checks that the capacity is a number and is 1 or more
-function checkCapacity(req,res,next){
-    const {data={}} = req.body;
-    if(typeof(data.capacity) !== "number"){
-        return next({status:400, message:"Table capacity must be a number."})
+function checkCapacity(req, res, next) {
+    const { data = {} } = req.body;
+    const capacity = data.capacity;
+  
+    if (typeof capacity !== "number" || capacity < 1) {
+      return next({ status: 400, message: "Table capacity must be a number greater than or equal to 1." });
     }
-    if(data.capacity <1){
-        return next({status:400, message:"Table capacity must be 1 or more."})
-    }
-    next()
-}
-
-module.exports = checkCapacity;
+  
+    next();
+  }
+  
+  module.exports = checkCapacity;

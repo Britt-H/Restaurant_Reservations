@@ -1,14 +1,15 @@
-const service = require("../tables.service");
+const service = require("../tables.services");
 
-//checks that the table exists
-async function tableExists(req,res,next){
-    const tableId = req.params.table_id;
-    let table = await service.read(tableId);
-    if(table){
-        return next()
-    }else{
-        return next({status:404, message:`Could not find table with id of ${tableId}`});
-    }
+// Checks if table exists
+async function tableExists(req, res, next) {
+  const tableId = req.params.table_id;
+  const table = await service.read(tableId);
+
+  if (table) {
+    return next();
+  } else {
+    return next({ status: 404, message: `Could not find table with ID ${tableId}` });
+  }
 }
 
 module.exports = tableExists;

@@ -1,12 +1,13 @@
-const service = require("../tables.service");
+const service = require("../tables.services");
 
 async function checkOccupiedStatus(req,res,next){
-    let {table_id} = req.params;
-    let table = await service.read(Number(table_id));
-    let occupied = table.occupied;
-    if(occupied == true){
+    const {table_id} = req.params;
+    const table = await service.read(Number(table_id))
+
+    if(table.occupied === true){
         return next({status:400,message:"Table is currently occupied."})
     }
+    
     next();
 }
 

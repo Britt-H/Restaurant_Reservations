@@ -9,7 +9,7 @@ async function reservationExists(req,res,next){
     if(reservation){
       return next();
     }
-    return next({status: 404, message: `Could not find the reservation with the id of ${reservationId}`});
+    return next({status: 404, message: `Could not find the reservation with the ID ${reservationId}`});
   }
 
 module.exports = reservationExists;
