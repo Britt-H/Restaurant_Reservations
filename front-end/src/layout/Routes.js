@@ -1,18 +1,16 @@
 import React from "react";
+
 import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
-// import { today } from "../utils/date-time";
-import NewReservation from "../reservations/reservation-displays/NewReservation";
-import NewTable from "../tables/tables-displays/NewTable";
-import SeatReservation from "../reservations/reservation-displays/SeatReservation";
-import Search from "../search/search-displays/Search";
-import EditReservation from "../reservations/reservation-displays/EditReservation";
+import { today } from "../utils/date-time";
+import NewReservationsComponent from "../newReservations/NewReservationsComponent";
+import NewTable from "../tables/NewTable";
+import SeatComponent from "../newReservations/SeatComponent";
+import SearchComponent from "../newReservations/SearchComponent";
+import EditReservationsComponent from "../newReservations/EditReservationsComponent";
+import useQuery from "../utils/useQuery";
 
-
-
-
-// NewTable
 /**
  * Defines all the routes for the application.
  *
@@ -20,42 +18,36 @@ import EditReservation from "../reservations/reservation-displays/EditReservatio
  *
  * @returns {JSX.Element}
  */
-function Routes({ date, setDate,refreshTables, tab}) {
+function Routes() {
+  const query = useQuery();
+  const date = query.get("date") || today();
 
   return (
     <Switch>
       <Route exact={true} path="/">
         <Redirect to={"/dashboard"} />
       </Route>
-
       <Route exact={true} path="/reservations">
         <Redirect to={"/dashboard"} />
       </Route>
-
       <Route path="/dashboard">
-        <Dashboard date={date} setDate={setDate} tab={tab} refreshTables={refreshTables} />
+        <Dashboard date={date} />
       </Route>
-
-      <Route exact={true} path = "/reservations/new">
-        <NewReservation date={date} setDate={setDate} tab={tab} refreshTables={refreshTables} />
+      <Route path="/reservations/new">
+        <NewReservationsComponent />
       </Route>
-
-      <Route path = "/tables/new">
-        <NewTable date={date} setDate={setDate} tab={tab} refreshTables={refreshTables}  />
+      <Route path="/reservations/:reservation_id/seat">
+        <SeatComponent />
       </Route>
-
-      <Route path = "/reservations/:reservation_id/seat">
-        <SeatReservation date={date} setDate={setDate} tab={tab} refreshTables={refreshTables}/>
+      <Route path="/tables/new">
+        <NewTable />
       </Route>
-
-      <Route path = "/reservations/:reservation_id/edit">
-        <EditReservation date={date} setDate={setDate} tab={tab} refreshTables={refreshTables}/>
+      <Route path="/search">
+        <SearchComponent />
       </Route>
-
-      <Route path = "/search">
-        <Search />
+      <Route path="/reservations/:reservation_id/edit">
+        <EditReservationsComponent />
       </Route>
-
       <Route>
         <NotFound />
       </Route>
