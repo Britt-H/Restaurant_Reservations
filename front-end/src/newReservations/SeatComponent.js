@@ -9,9 +9,11 @@ export default function SeatComponent() {
   const [tablesError, setTablesError] = useState(null);
   const [tables, setTables] = useState([]);
 
+  //extract reservation_id from URL
   let params = useParams();
   let reservation_id = params.reservation_id;
 
+  //get list of available tables when component mounts
   useEffect(loadTables, []);
   function loadTables() {
     const abortController = new AbortController();
@@ -20,6 +22,7 @@ export default function SeatComponent() {
     return () => abortController.abort();
   }
 
+  //create options for the dropdown list using available tables
   const tablesForm = tables.map((table) => {
     return (
       <option key={table.table_id} value={table.table_id}>
@@ -28,6 +31,7 @@ export default function SeatComponent() {
     );
   });
 
+  //function to handle changes in dropdown
   const onChange = (event) => {
     const { target } = event;
     const value = target.value;
@@ -36,9 +40,11 @@ export default function SeatComponent() {
     console.log("line 38", value, [target.name]);
   };
 
+  //function to handle form submission
   const submitHandler = (event) => {
     event.preventDefault();
     if (tableId) {
+      //call API to update reservation with selected table
       updateTable(tableId, reservation_id)
         .then(() => history.push("/"))
         .catch(setTablesError);

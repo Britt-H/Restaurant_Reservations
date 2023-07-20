@@ -8,11 +8,14 @@ export default function FormComponent({
   submitHandler,
   title,
 }) {
+  //get history object to handle nav
   const history = useHistory();
 
+  //handler for form input changes
   const onChange = (event) => {
     const { target } = event;
     const value = target.value;
+    //update newReservation state with the changed input value
     setNewReservation({ ...newReservation, [target.name]: value });
   };
 

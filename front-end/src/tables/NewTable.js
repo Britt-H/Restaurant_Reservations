@@ -12,6 +12,7 @@ export default function NewTable() {
     capacity: "",
   });
 
+  //function to handle changes in input fields
   const onChange = (event) => {
     const { target } = event;
     const value = target.value;
@@ -19,11 +20,14 @@ export default function NewTable() {
     console.log("value", newTable, [target.name], value);
   };
 
+  //function to handle form submission
   const submitHandler = (event) => {
     event.preventDefault();
     newTable.capacity = Number(newTable.capacity);
+    //call API to create new table
     createTable(newTable)
       .then((updatedTable) => {
+        //update state with the new table
         setTables([...tables, updatedTable]);
       })
       .then(() => history.push("/"))

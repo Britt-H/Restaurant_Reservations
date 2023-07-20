@@ -1,13 +1,18 @@
 import { updateResStatus } from "../utils/api";
 
 export default function ReservationsComponent({ reservations, loadDashboard }) {
+  //handler for cancelling reservation
   function onCancel(e, reservation) {
     e.preventDefault();
+    //confirmation popup
     if (window.confirm("Do you want to cancel this reservation?")) {
-      updateResStatus(reservation.reservation_id).then(() => loadDashboard());
+      updateResStatus(reservation.reservation_id)
+        .then(() => loadDashboard()) //reload reservation data
+        .catch((error) => console.log("error", error));
     }
   }
 
+  //map through reservations to display list
   let reservationsList = reservations.map((reservation) => {
     return (
       <div className="card mt-1" key={reservation.reservation_id}>

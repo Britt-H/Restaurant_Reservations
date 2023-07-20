@@ -3,20 +3,27 @@ import { listReservations } from "../utils/api";
 import ReservationsComponent from "../dashboard/ReservationsComponent";
 
 export default function SearchComponent() {
+  //state to track if searched has been performed
   const [searched, setSearched] = useState(false);
+  //state to store search results
   const [reservations, setReservations] = useState([]);
+  //state to store form data
   const [formData, setFormData] = useState({});
 
+  //function to handle input changes in search
   const onChange = (event) => {
     const { target } = event;
     const value = target.value;
     setFormData({ ...formData, [target.name]: value });
   };
 
+  //function to handle form submission
   const submitHandler = (event) => {
     event.preventDefault();
+    //mark serach as true
     setSearched(true);
     const abortController = new AbortController();
+    //call API for reservations matching on searched mobile_number
     listReservations(formData, abortController.signal)
       .then((response) => setReservations(response))
       .catch((error) => console.log(error));
