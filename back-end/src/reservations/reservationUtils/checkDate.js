@@ -15,22 +15,30 @@ async function checkDate(req, res, next) {
     });
   }
 
-  //check if date is in the past
-  if (current.getFullYear() > res_date.getFullYear()) {
-    future = false;
-  } else if (current.getFullYear() == res_date.getFullYear()) {
-    if (current.getTime() > res_date.getTime()) {
-      future = false;
-    }
-  }
+  // //check if date is in the past
+  // if (current.getFullYear() > res_date.getFullYear()) {
+  //   future = false;
+  // } else if (current.getFullYear() == res_date.getFullYear()) {
+  //   if (current.getTime() > res_date.getTime()) {
+  //     future = false;
+  //   }
+  // }
 
-  //date is not in the future, throw error
-  if (!future) {
-    return next({
-      status: 400,
-      message: "Reservation must take place in the future",
-    });
-  }
+  // //date is not in the future, throw error
+  // if (!future) {
+  //   return next({
+  //     status: 400,
+  //     message: "Reservation must take place in the future",
+  //   });
+  // }
+
+    // Check if date is in the past or today
+    if (res_date.toDateString() <= current.toDateString()) {
+      return next({
+        status: 400,
+        message: "Reservation must take place in the future",
+      });
+    }
 
   //move to next middleware after passing all checks
   next();
