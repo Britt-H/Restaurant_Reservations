@@ -14,25 +14,6 @@ async function checkDate(req, res, next) {
     });
   }
 
-  // // Check if date is in the past
-  // if (res_date.toDateString() < current.toDateString()) {
-  //   return next({
-  //     status: 400,
-  //     message: "Reservation must take place in the future",
-  //   });
-  // }
-
-  // // Check if the reservation date is the current day and time is after the current time
-  // if (
-  //   res_date.toDateString() === current.toDateString() &&
-  //   res_date.getTime() <= current.getTime()
-  // ) {
-  //   return next({
-  //     status: 400,
-  //     message: "Reservation must take place in the future12341234",
-  //   });
-  // }
-
     // Check if date is in the past
     if (res_date < current) {
       return next({
