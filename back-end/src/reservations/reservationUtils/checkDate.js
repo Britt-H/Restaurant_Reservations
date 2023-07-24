@@ -1,39 +1,40 @@
 //check reservation date middleware
 
 async function checkDate(req, res, next) {
-  let { data = {} } = req.body;
-  let res_date = new Date(data.reservation_date);
+  let { reservation_date, reservation_time } = req.body.data;
+  let res_date = new Date(`${reservation_date} ${reservation_time}`);
   let current = new Date();
-  let future = true;
 
   //check if date is a Tuesday, throw error
   if (res_date.getUTCDay() == 2) {
     return next({
       status: 400,
       message:
-        "Reservation_date can not be a tuesday because the store is closed",
+        "Reservation_date can not be a tuesday because the store is closed asdf",
     });
   }
 
-  // //check if date is in the past
-  // if (current.getFullYear() > res_date.getFullYear()) {
-  //   future = false;
-  // } else if (current.getFullYear() == res_date.getFullYear()) {
-  //   if (current.getTime() > res_date.getTime()) {
-  //     future = false;
-  //   }
-  // }
-
-  // //date is not in the future, throw error
-  // if (!future) {
+  // // Check if date is in the past
+  // if (res_date.toDateString() < current.toDateString()) {
   //   return next({
   //     status: 400,
   //     message: "Reservation must take place in the future",
   //   });
   // }
 
-    // Check if date is in the past or today
-    if (res_date.toDateString() <= current.toDateString()) {
+  // // Check if the reservation date is the current day and time is after the current time
+  // if (
+  //   res_date.toDateString() === current.toDateString() &&
+  //   res_date.getTime() <= current.getTime()
+  // ) {
+  //   return next({
+  //     status: 400,
+  //     message: "Reservation must take place in the future12341234",
+  //   });
+  // }
+
+    // Check if date is in the past
+    if (res_date < current) {
       return next({
         status: 400,
         message: "Reservation must take place in the future",

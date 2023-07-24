@@ -17,6 +17,8 @@ export default function FormComponent({
     const value = target.value;
     //update newReservation state with the changed input value
     setNewReservation({ ...newReservation, [target.name]: value });
+
+
   };
 
   return (
@@ -49,7 +51,7 @@ export default function FormComponent({
           <label htmlFor="mobile_number">Mobile Number</label>
           <input
             required
-            type="tel"
+            type="number"
             name="mobile_number"
             value={newReservation.mobile_number}
             placeholder="xxx-xxx-xxxx"
