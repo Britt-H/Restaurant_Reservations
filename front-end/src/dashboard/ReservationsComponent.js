@@ -14,6 +14,10 @@ export default function ReservationsComponent({ reservations, loadDashboard }) {
 
   //map through reservations to display list
   let reservationsList = reservations.map((reservation) => {
+    const isSeatedOrFinished = ["seated", "cancelled", "finished"].includes(
+      reservation.status
+    );
+
     return (
       <div className="card mt-1" key={reservation.reservation_id}>
         <div className="card-body">
@@ -40,7 +44,8 @@ export default function ReservationsComponent({ reservations, loadDashboard }) {
             Reservation Status: {reservation.status}
           </p>
 
-          {reservation.status !== "seated" ? (
+          {/* hide seat | edit | cancel buttons if status !== booked */}
+          {!isSeatedOrFinished ? (
             <a href={`/reservations/${reservation.reservation_id}/seat`}>
               <button className="btn btn-primary w-25 mb-1 ml-1" type="button">
                 Seat
@@ -48,13 +53,18 @@ export default function ReservationsComponent({ reservations, loadDashboard }) {
             </a>
           ) : null}
 
-          <a href={`/reservations/${reservation.reservation_id}/edit`}>
-            <button className="btn btn-secondary w-25 mb-1 ml-1" type="button">
-              Edit
-            </button>
-          </a>
+          {!isSeatedOrFinished && (
+            <a href={`/reservations/${reservation.reservation_id}/edit`}>
+              <button
+                className="btn btn-secondary w-25 mb-1 ml-1"
+                type="button"
+              >
+                Edit
+              </button>
+            </a>
+          )}
 
-          {reservation.status !== "cancelled" && (
+          {!isSeatedOrFinished && reservation.status !== "cancelled" && (
             <button
               type="button"
               className="btn btn-danger w-25 mb-1 ml-1"

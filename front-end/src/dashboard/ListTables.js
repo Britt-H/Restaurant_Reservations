@@ -20,8 +20,6 @@ export default function ListTables({ tables, loadTables, loadDashboard }) {
       <div className="card" key={table.table_id}>
         <div className="card-body">
           <h5 className="card-title">Table: {table.table_name}</h5>
-          {/* testing */}
-          {/* <p>{table.table_id}</p> */}
           <p className="card-text">Capacity: {table.capacity}</p>
           <p>
             <span data-table-id-status={table.table_id}>

@@ -10,7 +10,7 @@ async function checkDate(req, res, next) {
     return next({
       status: 400,
       message:
-        "Reservation_date can not be a tuesday because the store is closed asdf",
+        "Reservation_date can not be a tuesday because the store is closed",
     });
   }
 
