@@ -1,12 +1,6 @@
-# Capstone: Restaurant Reservation System
+## Restaurant Reservation System
 
-> You have been hired as a full stack developer at _Periodic Tables_, a startup that is creating a reservation system for fine dining restaurants.
-> The software is used only by restaurant personnel when a customer calls to request a reservation.
-> At this point, the customers will not access the system online.
-
-There are no user stories for deployment: it is expected that you will deploy the application to production after you finish a user story.
-
-There are no user stories for logging: it is expected that you will add logging to the application with enough detail to help you diagnose issues in production.
+Restaurant Reservation System to allow user to create, seat, & finish reservations. Also allows user to edit & delete tables & reservations.
 
 ## Existing files
 
@@ -21,13 +15,11 @@ The table below describes the folders in this starter repository:
 | `./back-end`     | The backend project, which runs on `localhost:5001` by default.  |
 | `./front-end`    | The frontend project, which runs on `localhost:3000` by default. |
 
-This starter code closely follows the best practices and patterns established in the Robust Server Structure module.
-
-**Note**: Please do not submit a pull request to this repository with your solution.
-
 ### Backend Existing files
 
 The `./back-end` folder contains all the code for the backend project.
+
+Seed & migration tables provided to emulate application on local machines.
 
 The table below describes the existing files in the `./back-end` folder:
 
@@ -178,47 +170,6 @@ so that I know how many customers will arrive at the restaurant on a given day.
 1. The `/reservations` API will have the same validations as above and will return 400, along with an informative error message, when a validation error happens.
    - seed the reservations table with the data contained in `./back-end/src/db/seeds/00-reservations.json`
 
-> **Hint** Dates and times in JavaScript and databases can be challenging.
->
-> The users have confirmed that they will be using Chrome to access the site. This means you can use `<input type="date" />` and `<input type="time" />`, which are supported by Chrome but may not work in other browsers.
->
-> `<input type="date" />` will store the date in `YYYY-MM-DD` format. This is a format that works well with the PostgreSQL `date` data type.
->
-> `<input type="time" />` will store the time in `HH:MM:SS` format. This is a format that works well with the PostgreSQL `time` data type.
->
-> **Optional** If you want to add support to other browsers such as Safari or IE, you can use the pattern and placeholder attributes along with the date and time inputs in your form. For the date input you can use `<input type="date" placeholder="YYYY-MM-DD" pattern="\d{4}-\d{2}-\d{2}"/>`, and for the time input you can use `<input type="time" placeholder="HH:MM" pattern="[0-9]{2}:[0-9]{2}"/>`. You can read more about handling browser support [here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date#handling_browser_support).
->
-> You can assume that all dates and times will be in your local time zone.
-
-> **Hint** In the backend code, be sure to wrap any async controller functions in an `asyncErrorBoundary` call to ensure errors in async code are property handled.
-
-In `back-end/src/errors/asyncErrorBoundary.js`
-
-```javascript
-function asyncErrorBoundary(delegate, defaultStatus) {
-  return (request, response, next) => {
-    Promise.resolve()
-      .then(() => delegate(request, response, next))
-      .catch((error = {}) => {
-        const { status = defaultStatus, message = error } = error;
-        next({
-          status,
-          message,
-        });
-      });
-  };
-}
-
-module.exports = asyncErrorBoundary;
-```
-
-Use in controllers as part of `module.exports`. For example:
-
-```javascript
-module.exports = {
-	create: asyncErrorBoundary(create)
-}
-```
 
 ### US-02 Create reservation on a future, working date
 
@@ -233,17 +184,6 @@ so that users do not accidentally create a reservation for days when we are clos
    - The reservation date is in the past. Only future reservations are allowed.
 1. The `/reservations` API will have the same validations as above and will return 400, along with an informative error message, when a validation error happens.
 
-> **Hint** There may be more than one validation error on the page at time.
->
-> For example, a reservation in the past on a Tuesday violates both rules, so the page should display two errors within a single `className="alert alert-danger"`
->
-> However, the API validation does not need to include multiple validation error messages.
-> You can run the validation in any order and report only one validation error at a time, and the tests will pass.
->
-> Also, parsing a date in YYYY-MM-DD format using the built-in Date class assumes the date is a UTC date. UTC is a time standard that is the basis for civil time and time zones worldwide, but it is NOT a timezone. As a result, keep an eye out for how your dates are interpreted by the Date class.
->
-> While there is nothing preventing you from using a third party library to handle dates for your project, you are encouraged to use the built-in Date class.
-
 ### US-03 Create reservation within eligible timeframe
 
 As a restaurant manager<br/>
@@ -257,8 +197,6 @@ so that users do not accidentally create a reservation for a time we cannot acco
    - The reservation time is after 9:30 PM, because the restaurant closes at 10:30 PM and the customer needs to have time to enjoy their meal.
    - The reservation date and time combination is in the past. Only future reservations are allowed. E.g., if it is noon, only allow reservations starting _after_ noon today.
 1. The `/reservations` API will have the same validations as above and will return 400, along with an informative error message, when a validation error happens.
-
-> **Hint** Parsing a Date that includes the time in JavaScript can be tricky. Again, keep an eye out for which time zone is being used for your Dates.
 
 ### US-04 Seat reservation
 
@@ -299,12 +237,6 @@ so that I know which tables are occupied and free.
 
 - if the table capacity is less than the number of people in the reservation, return 400 with an error message.
 - if the table is occupied, return 400 with an error message.
-
-> **Hint** Work through the acceptance criteria in the order listed, step-by-step. A different order may be more challenging.
-
-> **Hint** Seed the `tables` table in a similar way as it's done with the `reservations` table.
-
-> **Hint** Add a `reservation_id` column in the `tables` table. Use the `.references()` and `inTable()` knex functions to add the foreign key reference.
 
 ### US-05 Finish an occupied table
 
@@ -358,22 +290,6 @@ so that I can quickly access a customer's reservation when they call about their
      - the search page will display all reservations matching the phone number, regardless of status.
    - display `No reservations found` if there are no records found after clicking the Find button.
 
-> **Hint** To search for a partial or complete phone number, you should ignore all formatting and search only for the digits.
-> You will need to remove any non-numeric characters from the submitted mobile number and also use the PostgreSQL translate function.
->
-> The following function will perform the correct search.
->
-> ```javascript
-> function search(mobile_number) {
->   return knex("reservations")
->     .whereRaw(
->       "translate(mobile_number, '() -', '') like ?",
->       `%${mobile_number.replace(/\D/g, "")}%`
->     )
->     .orderBy("reservation_date");
-> }
-> ```
-
 ### US-08 Change an existing reservation
 
 As a restaurant manager<br/>
@@ -396,5 +312,3 @@ so that reservations are accurate and current.
    - Only reservations with a status of "booked" can be edited.
    - Clicking the "Submit" button will save the reservation, then displays the previous page.
    - Clicking "Cancel" makes no changes, then display the previous page.
-
-> **Hint** The same validation used for create applies to editing a reservation. The form and the API for updating a reservation must not allow the user to violate any of the rules specified when creating a reservation.
